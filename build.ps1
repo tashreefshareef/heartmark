@@ -48,7 +48,7 @@ Write-Host ("  HeartOverlay.dll  {0:N0} bytes" -f (Get-Item $dll).Length)
 Step "Tray app (C#)"
 $trayOut = Join-Path $build 'tray'
 & dotnet publish (Join-Path $root 'src\tray\Heartmark.csproj') `
-    -c $Config -r win-x64 --self-contained false `
+    -c $Config -r win-x64 --self-contained true `
     -o $trayOut --nologo -v q
 if ($LASTEXITCODE -ne 0) { throw "dotnet publish failed" }
 

@@ -196,7 +196,7 @@ To confirm the C++ and C# hashes still agree, which is the one failure that woul
 otherwise invisible:
 
 ```powershell
-.\tools\selftest\bin\Release\net7.0\SelfTest.exe hash C:\Pictures
+.\tools\selftest\bin\Release\net10.0\SelfTest.exe hash C:\Pictures
 .\build\probe\Release\probe.exe --hash C:\Pictures
 ```
 
