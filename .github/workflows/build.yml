@@ -20,6 +20,10 @@ jobs:
           dotnet-version: '10.0.x'
 
       # Same script used locally, so CI and a developer machine cannot drift.
+      - name: Install Inno Setup
+        shell: pwsh
+        run: choco install innosetup --no-progress -y
+
       - name: Build
         shell: pwsh
         run: ./build.ps1 -Config Release
@@ -41,5 +45,5 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: heartmark-${{ github.sha }}
-          path: dist/
+          path: build/installer/*.exe
           if-no-files-found: error

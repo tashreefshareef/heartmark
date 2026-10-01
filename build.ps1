@@ -64,6 +64,18 @@ Step "Installer scripts"
 Copy-Item (Join-Path $root 'install.ps1')   $dist -Force
 Copy-Item (Join-Path $root 'uninstall.ps1') $dist -Force
 
+
+Step "Installer (Inno Setup)"
+$iscc = @("${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe", "$env:ProgramFiles\Inno Setup 6\ISCC.exe") |
+    Where-Object { Test-Path $_ } | Select-Object -First 1
+if ($iscc) {
+    & $iscc /Q (Join-Path $root 'installer\heartmark.iss')
+    if ($LASTEXITCODE -ne 0) { throw "Inno Setup compile failed" }
+    Get-ChildItem (Join-Path $build 'installer') -Filter *.exe |
+        ForEach-Object { Write-Host ("  {0}  {1:N1} MB" -f $_.Name, ($_.Length / 1MB)) }
+} else {
+    Write-Host "  Inno Setup 6 not found - skipping installer (winget install JRSoftware.InnoSetup)" -ForegroundColor Yellow
+}
 Step "Done"
 Get-ChildItem $dist -File | Sort-Object Name |
     Format-Table @{L='Name';E={$_.Name}}, @{L='Size';E={'{0,10:N0}' -f $_.Length}} -AutoSize
